@@ -6,11 +6,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/account")
-public class AccountController {
+@RequestMapping("/cards")
+public class CardsController {
 
-    @GetMapping("myAccount")
-    public String geAccountDetails() {
-        return "Here is your account details";
-    }
+        @GetMapping("myCards")
+        public String geCardsDetails() {
+            return "Here is your cards details";
+        }
 }
