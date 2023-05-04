@@ -1,4 +1,4 @@
-package sam.guru.bank.samba_bank.config.security;
+package sam.guru.bank.samba_bank.config;
 
 
 import org.springframework.boot.autoconfigure.security.SecurityProperties;

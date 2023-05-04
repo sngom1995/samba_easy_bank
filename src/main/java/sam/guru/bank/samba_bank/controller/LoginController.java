@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import sam.guru.bank.samba_bank.model.Customer;
 import sam.guru.bank.samba_bank.repository.CustomerRepository;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @RestController
 public class LoginController {
@@ -37,6 +39,16 @@ public class LoginController {
                    .body("Error while creating customer");
     }
         return responseEntity;
+    }
+
+    @PostMapping("/user")
+    public ResponseEntity<?> getUser(){
+        List<Customer> customers = (List<Customer>) customerRepository.findAll();
+        if (customers.size() > 0) {
+            return ResponseEntity.ok(customers);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No customers found");
+        }
     }
 
 }
