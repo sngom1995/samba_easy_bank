@@ -36,7 +36,7 @@ public class Customer {
     private String pwd;
     private String role;
 
-    @JsonIgnore
+   // @JsonIgnore
     @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
     private Set<Authority> authorities;
 

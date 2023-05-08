@@ -41,7 +41,7 @@ public class LoginController {
         return responseEntity;
     }
 
-    @PostMapping("/user")
+    @GetMapping("/user")
     public ResponseEntity<?> getUser(){
         List<Customer> customers = (List<Customer>) customerRepository.findAll();
         if (customers.size() > 0) {
