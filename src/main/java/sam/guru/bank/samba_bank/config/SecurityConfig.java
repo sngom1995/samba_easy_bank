@@ -18,6 +18,7 @@ import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import sam.guru.bank.samba_bank.filters.RequestValidationFilter;
 
 import javax.sql.DataSource;
 import java.util.Collections;
@@ -50,6 +51,7 @@ public class SecurityConfig {
                 })
                 .and()
                 .csrf().disable()
+                .addFilterBefore(new RequestValidationFilter(), RequestValidationFilter.class)
                 .authorizeHttpRequests()
                 .requestMatchers("/account/myAccount").hasAuthority("VIEWACCOUNT")
                 .requestMatchers("/balance/myBalance").hasAnyAuthority("VIEWACCOUNT","VIEWBALANCE")
