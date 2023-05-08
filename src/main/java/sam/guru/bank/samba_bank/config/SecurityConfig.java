@@ -1,6 +1,7 @@
 package sam.guru.bank.samba_bank.config;
 
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,8 +16,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
 
 import javax.sql.DataSource;
+import java.util.Collections;
 
 @Configuration
 public class SecurityConfig {
@@ -32,10 +36,23 @@ public class SecurityConfig {
         .and()
         .httpBasic();*/
         http
+                .cors().configurationSource(new CorsConfigurationSource() {
+                    @Override
+                    public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+                        CorsConfiguration corsConfiguration = new CorsConfiguration();
+                        corsConfiguration.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
+                        corsConfiguration.setAllowedMethods(Collections.singletonList("*"));
+                        corsConfiguration.setAllowedHeaders(Collections.singletonList("*"));
+                        corsConfiguration.setAllowCredentials(true);
+                        corsConfiguration.setMaxAge(3600L);
+                        return corsConfiguration;
+                    }
+                })
+                .and()
                 .csrf().disable()
                 .authorizeHttpRequests()
                 .requestMatchers("/account/**", "/loans/**","/cards/**","/balance/**").authenticated()
-                .requestMatchers("/contact","/notices", "/register").permitAll()
+                .requestMatchers("/contact","/notices", "/register","/user").permitAll()
                 .requestMatchers("/balance/**").hasRole("ADMIN")
                 .anyRequest().permitAll()
                 .and()
