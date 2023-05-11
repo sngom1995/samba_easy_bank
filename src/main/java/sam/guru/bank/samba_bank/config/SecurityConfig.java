@@ -14,6 +14,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import sam.guru.bank.samba_bank.filters.AuthoritiesLoggingAfterFilter;
 import sam.guru.bank.samba_bank.filters.JWTTokenGeneratorFilter;
+import sam.guru.bank.samba_bank.filters.JWTValidatorFilter;
 import sam.guru.bank.samba_bank.filters.RequestValidationFilter;
 
 import java.util.Arrays;
@@ -24,14 +25,6 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-       /*http.authorizeHttpRequests()
-               .requestMatchers("/account/**").authenticated()
-               .requestMatchers("/contact","/notices").permitAll()
-               .anyRequest().permitAll()
-        .and()
-        .formLogin()
-        .and()
-        .httpBasic();*/
         http
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
@@ -53,6 +46,7 @@ public class SecurityConfig {
                 .addFilterBefore(new RequestValidationFilter(), BasicAuthenticationFilter.class)
                 .addFilterAfter(new AuthoritiesLoggingAfterFilter(), BasicAuthenticationFilter.class)
                 .addFilterAfter(new JWTTokenGeneratorFilter(), BasicAuthenticationFilter.class)
+                .addFilterBefore(new JWTValidatorFilter(), BasicAuthenticationFilter.class)
                 .authorizeHttpRequests()
                 .requestMatchers("/account/myAccount").hasAuthority("VIEWACCOUNT")
                 .requestMatchers("/balance/myBalance").hasAnyAuthority("VIEWACCOUNT","VIEWBALANCE")
@@ -69,27 +63,6 @@ public class SecurityConfig {
        return http.build();
     }
 
-   /* @Bean
-    InMemoryUserDetailsManager userDetailsManager() {
-
-        UserDetails user = User.withUsername("user")
-                .password("{noop}password")
-                .roles("USER")
-                .build();
-
-        UserDetails admin = User.withUsername("admin")
-                .password("{noop}password")
-                .roles("ADMIN")
-                .build();
-
-        return new InMemoryUserDetailsManager(user, admin);
-
-    }*/
-
-   /* @Bean
-    public UserDetailsService userDetailsService(DataSource dataSource) {
-        return new JdbcUserDetailsManager(dataSource);
-    }*/
 
     @Bean
     public PasswordEncoder passwordEncoder(){
